@@ -1,0 +1,34 @@
+Feature: Music track endpoint request and response code and metadata validations  
+		 The purpose for these tests is to send request and verify response for music track api 
+  
+
+ Background: The user is authorized to access music track endpoint  
+		Given User sends the GET request to music endpoint 
+		url "https://testapi.io/api/bbcapitestsuite/media"
+
+	Scenario: 001 Verify that there is no broken or invalid link(s) in "uri" field in "uris"  
+		When read the response and collect the values for "uri" 
+		And find if any "uri" value is null or empty 
+		Then found no "uri" value is null or empty 
+		When send the GET request to all the "uri" one by one 
+		And find out whether the link is valid or broken based on the response code  
+		Then verified the response code and found all the "uri" are valid 
+
+	Scenario: 002 Send Get request and verify the response structure is according to the data model 
+		Then received the response code as 200 
+		And JSon response for the Get request 
+		When validate the response schema as per the data model  
+		And also, for the "field names" and "field values and types" combination including nested objects 
+		Then response schema is defined correctly as per the data model 
+		And no issue found in schema for "field names" and "field values and types" combination including nested objects 
+
+	Scenario: 003 Send Post and delete request and verify resource created deleted successfully  
+		Given User sets a Post request  
+		When send POST request to "https://testapi.io/api/bbcapitestsuite/media" to create a resource
+ 		Then verified the response code is 201 
+		When send a Get request to access the resource created by the post request
+		Then confirmed that the resource created successfully
+		When send a delete request to music endpoint  
+		Then verifed the response code received as 200, 202 or 204 
+		When send a Get request to confirm the delettion if resource
+		Then confirmed that the resource deleted successfully
